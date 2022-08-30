@@ -1,0 +1,11 @@
+.header-container {
+  .navbar-nav {
+    z-index: 10;
+  }
+
+  .nav-link {
+    &.active {
+      color: #00bfff !important;
+    }
+  }
+}
