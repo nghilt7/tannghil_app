@@ -7,11 +7,12 @@ import { getAllUsers } from "../../../services/apiService";
 
 import "./ManageUser.scss";
 import { toast } from "react-toastify";
+import ModalUpdateUser from "./ModalUpdateUser";
 
 const ManageUser = () => {
-  // Modal User
+  // Modal State
   const [isShowModalCreateUser, setIsShowModalCreateUser] = useState(false);
-  const handleShow = () => setIsShowModalCreateUser(true);
+  const [isShowModalUpdateUser, setIsShowModalUpdateUser] = useState(false);
 
   // Table User
   const [listUsers, setListUsers] = useState([]);
@@ -31,22 +32,44 @@ const ManageUser = () => {
     }
   };
 
+  // Modal Update User
+
+  const [dataUpdate, setDataUpdate] = useState({});
+
+  const handleClickBtnUpdate = (user) => {
+    setIsShowModalUpdateUser(true);
+    if (user) {
+      setDataUpdate(user);
+    }
+  };
+
   return (
     <div className="manage-user-container">
       <div className="title">Manage User</div>
       <div className="users-content">
         <div className="btn-add-new">
-          <button className="btn btn-primary mb-3 mt-3" onClick={handleShow}>
+          <button
+            className="btn btn-primary mb-3 mt-3"
+            onClick={() => setIsShowModalCreateUser(true)}
+          >
             <FcPlus /> Add new user
           </button>
         </div>
         <div className="table-users-container">
-          <TableUsers listUsers={listUsers} />
+          <TableUsers
+            listUsers={listUsers}
+            handleClickBtnUpdate={handleClickBtnUpdate}
+          />
         </div>
         <ModalCreateUser
           show={isShowModalCreateUser}
           setShow={setIsShowModalCreateUser}
           fetchListUsers={fetchListUsers}
+        />
+        <ModalUpdateUser
+          show={isShowModalUpdateUser}
+          setShow={setIsShowModalUpdateUser}
+          user={dataUpdate}
         />
       </div>
     </div>
