@@ -8,11 +8,13 @@ import { getAllUsers } from "../../../services/apiService";
 import "./ManageUser.scss";
 import { toast } from "react-toastify";
 import ModalUpdateUser from "./ModalUpdateUser";
+import ModalDeleteUser from "./ModalDeleteUser";
 
 const ManageUser = () => {
   // Modal State
   const [isShowModalCreateUser, setIsShowModalCreateUser] = useState(false);
   const [isShowModalUpdateUser, setIsShowModalUpdateUser] = useState(false);
+  const [isShowModalDeleteUser, setIsShowModalDeleteUser] = useState(false);
 
   // Table User
   const [listUsers, setListUsers] = useState([]);
@@ -43,6 +45,20 @@ const ManageUser = () => {
     }
   };
 
+  const resetUpdateData = () => {
+    setDataUpdate({});
+  };
+
+  // Modal Delete User
+  const [dataDelete, setDataDelete] = useState({});
+
+  const handleClickBtnDelete = (user) => {
+    setIsShowModalDeleteUser(true);
+    if (user) {
+      setDataDelete(user);
+    }
+  };
+
   return (
     <div className="manage-user-container">
       <div className="title">Manage User</div>
@@ -59,6 +75,7 @@ const ManageUser = () => {
           <TableUsers
             listUsers={listUsers}
             handleClickBtnUpdate={handleClickBtnUpdate}
+            handleClickBtnDelete={handleClickBtnDelete}
           />
         </div>
         <ModalCreateUser
@@ -70,6 +87,14 @@ const ManageUser = () => {
           show={isShowModalUpdateUser}
           setShow={setIsShowModalUpdateUser}
           user={dataUpdate}
+          fetchListUsers={fetchListUsers}
+          resetUpdateData={resetUpdateData}
+        />
+        <ModalDeleteUser
+          show={isShowModalDeleteUser}
+          setShow={setIsShowModalDeleteUser}
+          fetchListUsers={fetchListUsers}
+          user={dataDelete}
         />
       </div>
     </div>
