@@ -7,7 +7,7 @@ import { postCreateNewUser } from "../../../services/apiService";
 
 const ModalCreateUser = (props) => {
   // Props
-  const { show, setShow } = props;
+  const { show, setShow, fetchListUsers } = props;
 
   //   State of form
   const [email, setEmail] = useState("");
@@ -67,6 +67,7 @@ const ModalCreateUser = (props) => {
     if (data && +EC === 0) {
       toast.success(EM);
       handleClose();
+      fetchListUsers();
     }
 
     if (data && +EC !== 0) {

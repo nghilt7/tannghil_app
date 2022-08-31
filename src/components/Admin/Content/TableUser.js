@@ -1,24 +1,5 @@
-import { useEffect, useState } from "react";
-import { getAllUsers } from "../../../services/apiService";
-import { toast } from "react-toastify";
-
 const TableUsers = (props) => {
-  const [listUsers, setListUsers] = useState([]);
-
-  useEffect(() => {
-    getUsers();
-  }, []);
-
-  const getUsers = async () => {
-    const data = await getAllUsers();
-    const { EM, EC, DT } = data;
-    if (data && +EC === 0) {
-      setListUsers(DT);
-    }
-    if (data && +EC !== 0) {
-      toast.error(EM);
-    }
-  };
+  const { listUsers } = props;
 
   return (
     <>
