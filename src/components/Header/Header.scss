@@ -1,6 +1,39 @@
 .header-container {
-  .navbar-nav {
+  @media (min-width: 1350px) {
+    .container,
+    .container-lg,
+    .container-md,
+    .container-sm,
+    .container-xl,
+    .container-xxl {
+      max-width: 1400px !important;
+    }
+  }
+
+  .navbar {
+    background-color: rgba(0, 0, 0, 0) !important;
     z-index: 10;
+  }
+
+  .btn-login {
+    background-color: transparent;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    height: 40px;
+    margin-right: 15px;
+    padding: 0 15px;
+  }
+
+  .btn-signup {
+    background: #303030;
+    border-radius: 5px;
+    color: #fff;
+    height: 40px;
+    padding: 0 15px;
+
+    &:hover {
+      background: #000;
+    }
   }
 
   .nav-link {

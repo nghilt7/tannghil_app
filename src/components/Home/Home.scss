@@ -1,7 +1,38 @@
 .home-container {
   video {
-    position: fixed;
     bottom: 0;
+    position: fixed;
     width: 100vw;
+  }
+
+  .homepage-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 170px 100px;
+    position: relative;
+    width: 50%;
+
+    .title {
+      font-size: 45px;
+      font-weight: 400;
+    }
+
+    .text {
+      font-size: 25px;
+    }
+
+    .btn-start {
+      background: #303030;
+      border-radius: 5px;
+      border: none;
+      color: #fff;
+      height: 40px;
+      padding: 0 15px;
+
+      &:hover {
+        background: #000;
+      }
+    }
   }
 }

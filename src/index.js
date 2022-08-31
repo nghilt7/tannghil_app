@@ -7,6 +7,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import User from "./components/User/User";
 import Admin from "./components/Admin/Admin";
 import Home from "./components/Home/Home";
+import ManageUser from "./components/Admin/Content/ManageUser";
+import Dashboard from "./components/Admin/Content/DashBoard";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -17,8 +19,11 @@ root.render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
-          <Route path="admins" element={<Admin />} />
           <Route path="users" element={<User />} />
+        </Route>
+        <Route path="/admins" element={<Admin />}>
+          <Route index element={<Dashboard />} />
+          <Route path="manage-users" element={<ManageUser />} />
         </Route>
       </Routes>
     </BrowserRouter>
