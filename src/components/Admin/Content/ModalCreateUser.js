@@ -1,13 +1,13 @@
 import React, { useState } from "react";
+import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FcPlus } from "react-icons/fc";
+import { toast } from "react-toastify";
 
-const ModalCreateUser = () => {
-  // statr of modal
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+const ModalCreateUser = (props) => {
+  // Props
+  const { show, setShow } = props;
 
   //   State of form
   const [email, setEmail] = useState("");
@@ -17,6 +17,27 @@ const ModalCreateUser = () => {
   const [image, setImage] = useState("");
   const [previewImage, setPreviewImage] = useState("");
 
+  // function validate
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
+  //   Handle
+  const handleClose = () => {
+    setShow(false);
+    setEmail("");
+    setPassword("");
+    setUsername("");
+    setRole("");
+    setImage("");
+    setPreviewImage("");
+  };
+
   const handleUploadImage = (event) => {
     if (event.target && event.target.files && event.target.files[0]) {
       setPreviewImage(URL.createObjectURL(event.target.files[0]));
@@ -24,11 +45,53 @@ const ModalCreateUser = () => {
     }
   };
 
+  const handleSubmitCreateUser = async () => {
+    // validate form
+    const isValidEmail = validateEmail(email);
+
+    if (!isValidEmail) {
+      toast.error("Email is not valid");
+      return;
+    }
+
+    if (!password) {
+      toast.error("Password is required!");
+      return;
+    }
+
+    // config axios form data type
+    const data = new FormData();
+    data.append("email", email);
+    data.append("password", password);
+    data.append("username", username);
+    data.append("role", role);
+    data.append("userImage", image);
+
+    // call api
+    let res = await axios.post(
+      "http://localhost:8081/api/v1/participant",
+      data
+    );
+
+    // check response
+    const {
+      data: { EC, EM },
+    } = res;
+    if (res.data && +EC === 0) {
+      toast.success(EM);
+      handleClose();
+    }
+
+    if (res.data && +EC !== 0) {
+      toast.error(EM);
+    }
+  };
+
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      {/* <Button variant="primary" onClick={handleShow}>
         Launch demo modal
-      </Button>
+      </Button> */}
 
       <Modal
         className="modal-add-user"
@@ -63,7 +126,7 @@ const ModalCreateUser = () => {
             <div className="col-md-6">
               <label className="form-label">Username</label>
               <input
-                type="password"
+                type="text"
                 className="form-control"
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
@@ -105,7 +168,7 @@ const ModalCreateUser = () => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={() => handleSubmitCreateUser()}>
             Save
           </Button>
         </Modal.Footer>

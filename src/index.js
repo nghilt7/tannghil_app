@@ -11,6 +11,7 @@ import ManageUser from "./components/Admin/Content/ManageUser";
 import Dashboard from "./components/Admin/Content/DashBoard";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
