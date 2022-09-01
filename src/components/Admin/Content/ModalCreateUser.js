@@ -4,10 +4,14 @@ import Modal from "react-bootstrap/Modal";
 import { FcPlus } from "react-icons/fc";
 import { toast } from "react-toastify";
 import { postCreateNewUser } from "../../../services/apiService";
+import { validateEmail } from "./../../../utils/validateEmail";
 
 const ModalCreateUser = (props) => {
-  // Props
-  const { show, setShow, fetchListUsers } = props;
+  // Props data
+  const { show, setShow } = props;
+
+  // props function
+  const { fetchListUsersWithPaginate, setCurrentPage } = props;
 
   //   State of form
   const [email, setEmail] = useState("");
@@ -18,14 +22,6 @@ const ModalCreateUser = (props) => {
   const [previewImage, setPreviewImage] = useState("");
 
   // function validate
-
-  const validateEmail = (email) => {
-    return String(email)
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
-  };
 
   //   Handle
   const handleClose = () => {
@@ -67,7 +63,8 @@ const ModalCreateUser = (props) => {
     if (data && +EC === 0) {
       toast.success(EM);
       handleClose();
-      fetchListUsers();
+      setCurrentPage(1);
+      await fetchListUsersWithPaginate(1);
     }
 
     if (data && +EC !== 0) {
@@ -77,10 +74,6 @@ const ModalCreateUser = (props) => {
 
   return (
     <>
-      {/* <Button variant="primary" onClick={handleShow}>
-        Launch demo modal
-      </Button> */}
-
       <Modal
         className="modal-add-user"
         backdrop="static"

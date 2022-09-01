@@ -8,7 +8,7 @@ const ModalDeleteUser = (props) => {
   const { user } = props;
 
   // props function
-  const { show, setShow, fetchListUsers } = props;
+  const { show, setShow, fetchListUsersWithPaginate, setCurrentPage } = props;
 
   const handleClose = () => setShow(false);
 
@@ -20,7 +20,8 @@ const ModalDeleteUser = (props) => {
     if (data && +EC === 0) {
       toast.success(EM);
       handleClose();
-      fetchListUsers();
+      setCurrentPage(1);
+      await fetchListUsersWithPaginate(1);
     }
 
     if (data && +EC !== 0) {
@@ -30,7 +31,7 @@ const ModalDeleteUser = (props) => {
 
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
+      <Modal backdrop="static" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Confirm delete user?</Modal.Title>
         </Modal.Header>

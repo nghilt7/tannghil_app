@@ -1,0 +1,53 @@
+.login-container {
+  .header {
+    height: 45px;
+    padding: 5px 100px 0 100px;
+    text-align: right;
+
+    button {
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      border: 1px solid;
+      margin-left: 15px;
+      padding: 3px 15px;
+
+      &:hover {
+        background-color: #fff;
+      }
+    }
+  }
+
+  .title {
+    font-size: 30px;
+    font-weight: 600;
+    padding: 20px 0;
+    text-align: center;
+  }
+
+  .welcome {
+    font-size: 20px;
+    padding: 10px 0;
+    text-align: center;
+  }
+
+  .content-form {
+    input {
+      margin-bottom: 15px;
+      margin-top: 3px;
+    }
+
+    button {
+      background: #262627;
+      border-radius: 5px;
+      border: none;
+      color: #fff;
+      height: 40px;
+      margin: 15px 0;
+      width: 100%;
+    }
+
+    .back {
+      cursor: pointer;
+    }
+  }
+}

@@ -32,4 +32,19 @@ const deleteUser = async (id) => {
   return await axios.delete("api/v1/participant", { data: { id } });
 };
 
-export { postCreateNewUser, getAllUsers, putUpdateUser, deleteUser };
+const getUserWithPaginate = async (page, limit) => {
+  return await axios.get(`api/v1/participant?page=${page}&limit=${limit}`);
+};
+
+const postLogin = async (email, password) => {
+  return await axios.post(`api/v1/login`, { email, password });
+};
+
+export {
+  postCreateNewUser,
+  getAllUsers,
+  putUpdateUser,
+  deleteUser,
+  getUserWithPaginate,
+  postLogin,
+};
