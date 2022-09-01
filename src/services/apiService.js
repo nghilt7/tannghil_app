@@ -52,6 +52,10 @@ const getQuizByUser = async () => {
   return await axios.get(`api/v1/quiz-by-participant`);
 };
 
+const getDataQuiz = async (id) => {
+  return await axios.get(`api/v1/questions-by-quiz?quizId=${id}`);
+};
+
 export {
   postCreateNewUser,
   getAllUsers,
@@ -61,4 +65,5 @@ export {
   postLogin,
   postRegister,
   getQuizByUser,
+  getDataQuiz,
 };

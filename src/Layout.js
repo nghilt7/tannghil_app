@@ -9,6 +9,15 @@ import ManageUser from "./components/Admin/Content/ManageUser";
 import Dashboard from "./components/Admin/Content/DashBoard";
 import Register from "./components/Auth/Register";
 import ListQuiz from "./components/User/ListQuiz";
+import DetailQuiz from "./components/User/DetailQuiz";
+
+const NotFound = () => {
+  return (
+    <div className="container mt-3 alert alert-danger">
+      404 Not foud data in this current url.
+    </div>
+  );
+};
 
 const Layout = () => {
   return (
@@ -18,12 +27,14 @@ const Layout = () => {
           <Route index element={<Home />} />
           <Route path="users" element={<ListQuiz />} />
         </Route>
+        <Route path="/quiz/:id" element={<DetailQuiz />} />
         <Route path="/admins" element={<Admin />}>
           <Route index element={<Dashboard />} />
           <Route path="manage-users" element={<ManageUser />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer
         position="top-right"
