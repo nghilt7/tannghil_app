@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { postLogin } from "../../services/apiService";
 import { useDispatch } from "react-redux";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { ImSpinner9 } from "react-icons/im";
 
 import "./Login.scss";
 import { toast } from "react-toastify";
 import { validateEmail } from "./../../utils/validateEmail";
+import { doLogin } from "./../../redux/User/user.actions";
 
 const Login = () => {
   // data state
@@ -20,6 +22,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [validForm, setValidForm] = useState(validDefault);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -46,18 +50,19 @@ const Login = () => {
 
     // call apis
 
+    setIsLoading(true);
+
     const data = await postLogin(email, password);
     const { EM, EC, DT } = data;
 
     if (data && +EC === 0) {
-      dispatch({
-        type: "FETCH_USER_LOGIN_SUCCESS",
-        payload: DT,
-      });
+      dispatch(doLogin(DT));
       toast.success(EM);
+      setIsLoading(false);
       navigate("/");
     }
     if (data && +EC !== 0) {
+      setIsLoading(false);
       toast.error(EM);
     }
   };
@@ -111,7 +116,13 @@ const Login = () => {
         </div>
         <span>Forgot password?</span>
         <div className="">
-          <button onClick={() => handleLogin()}>Login to Tanghi</button>
+          <button disabled={isLoading} onClick={() => handleLogin()}>
+            {isLoading ? (
+              <ImSpinner9 className="loader-icon" />
+            ) : (
+              <span> Login to Tanghi</span>
+            )}
+          </button>
         </div>
         <div className="text-center">
           <span className="back" onClick={() => navigate("/")}>

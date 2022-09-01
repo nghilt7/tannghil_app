@@ -1,4 +1,4 @@
-import { DECREMENT } from "../Counter/counter.types";
+import { FETCH_USER_LOGIN_SUCCESS } from "../User/user.types";
 
 const INITIAL_STATE = {
   account: {
@@ -13,7 +13,7 @@ const INITIAL_STATE = {
 
 const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case "FETCH_USER_LOGIN_SUCCESS":
+    case FETCH_USER_LOGIN_SUCCESS:
       const {
         payload: { access_token, username, image, role },
       } = action;
@@ -26,12 +26,6 @@ const userReducer = (state = INITIAL_STATE, action) => {
           role,
         },
         isAuthenticated: true,
-      };
-
-    case DECREMENT:
-      return {
-        ...state,
-        count: state.count - 1,
       };
 
     default:
