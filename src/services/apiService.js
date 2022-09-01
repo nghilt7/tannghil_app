@@ -1,5 +1,7 @@
 import axios from "../utils/axiosCustomize";
 
+//  USER
+
 const postCreateNewUser = async (email, password, username, role, image) => {
   // config axios form data type
   const data = new FormData();
@@ -44,6 +46,12 @@ const postRegister = async (email, username, password) => {
   return await axios.post(`api/v1/register`, { email, username, password });
 };
 
+// Quiz
+
+const getQuizByUser = async () => {
+  return await axios.get(`api/v1/quiz-by-participant`);
+};
+
 export {
   postCreateNewUser,
   getAllUsers,
@@ -52,4 +60,5 @@ export {
   getUserWithPaginate,
   postLogin,
   postRegister,
+  getQuizByUser,
 };
