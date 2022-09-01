@@ -1,35 +1,34 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { postLogin } from "../../services/apiService";
-import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
-import "./Login.scss";
-import { toast } from "react-toastify";
-import { validateEmail } from "./../../utils/validateEmail";
+import "./Register.scss";
 
-const Login = () => {
-  // data state
+import { validateEmail } from "./../../utils/validateEmail";
+import { postRegister } from "../../services/apiService";
+
+const Register = () => {
+  // state data
   const validDefault = {
     validEmail: true,
     validPassword: true,
+    validConfirmPassword: true,
   };
-
-  // form state
+  // state
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [validForm, setValidForm] = useState(validDefault);
 
   const navigate = useNavigate();
 
-  // redux
-  const dispatch = useDispatch();
-
   //   handle
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     setValidForm(validDefault);
-    // validate
+    // validate form
     const isValidEmail = validateEmail(email);
 
     if (!isValidEmail) {
@@ -44,16 +43,17 @@ const Login = () => {
       return;
     }
 
-    // call apis
+    if (password !== confirmPassword) {
+      toast.error("Password and Confirm password is not correct!");
+      setValidForm({ ...validDefault, validConfirmPassword: false });
+      return;
+    }
 
-    const data = await postLogin(email, password);
-    const { EM, EC, DT } = data;
+    // call api
+    let data = await postRegister(email, username, password);
+    const { EC, EM } = data;
 
     if (data && +EC === 0) {
-      dispatch({
-        type: "FETCH_USER_LOGIN_SUCCESS",
-        payload: DT,
-      });
       toast.success(EM);
       navigate("/");
     }
@@ -63,13 +63,15 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="register-container">
       <div className="header">
-        <span>Don't have an account yet?</span>
-        <button onClick={() => navigate("/register")}>Sign up</button>
+        <span>Already have an account?</span>
+        <button onClick={() => navigate("/login")}>Login</button>
       </div>
       <div className="title col-4 mx-auto">Tanghi</div>
-      <div className="welcome col-4 mx-auto">Hello, who’s this?</div>
+      <div className="welcome col-4 mx-auto">
+        Get better data with conversational forms, surveys, quizzes & more.
+      </div>
       <div className="content-form col-4 mx-auto">
         <div className="form-group">
           <label>Email</label>
@@ -80,6 +82,15 @@ const Login = () => {
             }
             value={email}
             onChange={(event) => setEmail(event.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label>Username</label>
+          <input
+            type="text"
+            className="form-control"
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
           />
         </div>
         <div className="form-group">
@@ -109,9 +120,21 @@ const Login = () => {
             )}
           </div>
         </div>
-        <span>Forgot password?</span>
+        <div className="form-group">
+          <label>Confirm Password</label>
+          <input
+            type="password"
+            className={
+              validForm.validConfirmPassword
+                ? "form-control"
+                : "form-control is-invalid"
+            }
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
+          />
+        </div>
         <div className="">
-          <button onClick={() => handleLogin()}>Login to Tanghi</button>
+          <button onClick={() => handleRegister()}>Sign up to Tanghi</button>
         </div>
         <div className="text-center">
           <span className="back" onClick={() => navigate("/")}>
@@ -124,4 +147,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
