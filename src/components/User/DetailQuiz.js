@@ -45,6 +45,7 @@ const DetailQuiz = () => {
               questionDescription = item.description;
               image = item.image;
             }
+            item.answers.isSelected = false;
             answers.push(item.answers);
           });
           return { questionId: key, answers, questionDescription, image };
@@ -68,6 +69,28 @@ const DetailQuiz = () => {
     if (dataQuiz && dataQuiz.length > index + 1) setIndex(index + 1);
   };
 
+  const handleCheckBox = (answerId, questionId) => {
+    const _dataQuiz = _.cloneDeep(dataQuiz);
+    let question = _dataQuiz.find((item) => +item.questionId === +questionId);
+    if (question && question.answers) {
+      let b = question.answers.map((answer) => {
+        if (+answer.id === +answerId) {
+          answer.isSelected = !answer.isSelected;
+        }
+        return answer;
+      });
+
+      question.answers = b;
+    }
+
+    let index = _dataQuiz.findIndex((item) => +item.questionId === +questionId);
+
+    if (index > -1) {
+      _dataQuiz[index] = question;
+      setDataQuiz(_dataQuiz);
+    }
+  };
+
   return (
     <div className="detail-quiz-container">
       <div className="left-content">
@@ -80,15 +103,20 @@ const DetailQuiz = () => {
           <Question
             index={index}
             data={dataQuiz && dataQuiz.length > 0 ? dataQuiz[index] : []}
+            handleCheckBox={handleCheckBox}
           />
         </div>
         <div className="q-footer">
-          <button className="btn btn-primary me-3" onClick={() => handlePrev()}>
+          <button className="btn btn-primary" onClick={() => handlePrev()}>
             Prev
           </button>
-          <button className="btn btn-secondary" onClick={() => handleNext()}>
+          <button
+            className="btn btn-secondary mx-3"
+            onClick={() => handleNext()}
+          >
             Next
           </button>
+          <button className="btn btn-warning">Finish</button>
         </div>
       </div>
       <div className="right-content">count down</div>
