@@ -16,8 +16,6 @@ const Question = (props) => {
     handleCheckBox(aId, qId);
   };
 
-  console.log(">>>", data);
-
   return (
     <>
       {data.image ? (

@@ -91,6 +91,45 @@ const DetailQuiz = () => {
     }
   };
 
+  const handleFinishQuiz = () => {
+    //   {
+    //     "quizId": 1,
+    //     "answers": [
+    //         {
+    //             "questionId": 1,
+    //             "userAnswerId": [3]
+    //         },
+    //         {
+    //             "questionId": 2,
+    //             "userAnswerId": [6]
+    //         }
+    //     ]
+    // }
+    console.log(">>> data before submit", dataQuiz);
+    let payload = { quizId: +id, answers: [] };
+    let answers = [];
+    if (dataQuiz && dataQuiz.length > 0) {
+      dataQuiz.forEach((item) => {
+        let questionId = item.questionId;
+        let userAnswerId = [];
+
+        // userAnswerId
+        item.answers.forEach((answer) => {
+          if (answer.isSelected) {
+            userAnswerId.push(answer.id);
+          }
+        });
+
+        answers.push({
+          questionId: +questionId,
+          userAnswerId,
+        });
+      });
+      payload.answers = answers;
+      console.log(">>> final payload", payload);
+    }
+  };
+
   return (
     <div className="detail-quiz-container">
       <div className="left-content">
@@ -116,7 +155,12 @@ const DetailQuiz = () => {
           >
             Next
           </button>
-          <button className="btn btn-warning">Finish</button>
+          <button
+            className="btn btn-warning"
+            onClick={() => handleFinishQuiz()}
+          >
+            Finish
+          </button>
         </div>
       </div>
       <div className="right-content">count down</div>
