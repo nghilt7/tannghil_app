@@ -11,8 +11,6 @@ const ModalResult = (props) => {
 
   const handleClose = () => setShow(false);
 
-  console.log(">>> data", dataModalResult);
-
   return (
     <>
       <Modal backdrop="static" show={show} onHide={handleClose}>

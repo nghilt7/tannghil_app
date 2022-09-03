@@ -15,9 +15,11 @@ import sidebarBg from "../../assets/bg2.jpg";
 
 import "./Sidebar.scss";
 import "react-pro-sidebar/dist/css/styles.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SideBar = ({ collapsed, toggled, handleToggleSidebar }) => {
+  const navigate = useNavigate();
+
   return (
     <>
       <ProSidebar
@@ -41,7 +43,7 @@ const SideBar = ({ collapsed, toggled, handleToggleSidebar }) => {
             }}
           >
             <DiReact size={"3em"} color={"00bfff"} />
-            Tannghi Admin
+            <span onClick={() => navigate("/")}>Tannghi Admin</span>
           </div>
         </SidebarHeader>
 
@@ -56,7 +58,9 @@ const SideBar = ({ collapsed, toggled, handleToggleSidebar }) => {
               <MenuItem>
                 Manage Users <Link to="/admins/manage-users" />
               </MenuItem>
-              <MenuItem>Manage Quizs</MenuItem>
+              <MenuItem>
+                Manage Quizs <Link to="/admins/manage-quizzes" />
+              </MenuItem>
               <MenuItem>Manage Answers</MenuItem>
             </SubMenu>
           </Menu>
