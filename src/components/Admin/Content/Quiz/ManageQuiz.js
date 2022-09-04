@@ -3,7 +3,10 @@ import Select from "react-select";
 import Accordion from "react-bootstrap/Accordion";
 import { toast } from "react-toastify";
 
-import { postCreateNewQuiz } from "../../../../services/apiService";
+import {
+  getAllQuizForAdmin,
+  postCreateNewQuiz,
+} from "../../../../services/apiService";
 
 import "./ManageQuiz.scss";
 import TableQuiz from "./TableQuiz";
@@ -15,6 +18,8 @@ const ManageQuiz = () => {
   const [type, setType] = useState({ value: "EASY", label: "EASY" });
   const [image, setImage] = useState(null);
 
+  const [listQuiz, setListQuiz] = useState([]);
+
   const inputRef = useRef(null);
 
   // Select option quiz difficult
@@ -25,6 +30,15 @@ const ManageQuiz = () => {
   ];
 
   //   handle
+
+  const fetchQuiz = async () => {
+    let res = await getAllQuizForAdmin();
+    if (res && +res.EC === 0) {
+      setListQuiz(res.DT);
+    } else {
+      toast.error(res.EM);
+    }
+  };
 
   const resetFileInput = () => {
     // 👇️ reset input value
@@ -52,6 +66,8 @@ const ManageQuiz = () => {
       setDescription("");
       setImage(null);
       resetFileInput();
+      toast.success(res.EM);
+      fetchQuiz();
     } else {
       toast.error(res.EM);
     }
@@ -123,7 +139,7 @@ const ManageQuiz = () => {
       </Accordion>
 
       <div className="list-detail">
-        <TableQuiz />
+        <TableQuiz fetchQuiz={fetchQuiz} listQuiz={listQuiz} />
       </div>
     </div>
   );

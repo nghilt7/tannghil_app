@@ -1,22 +1,39 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import { getAllQuizForAdmin } from "../../../../services/apiService";
-import { toast } from "react-toastify";
 
-const TableQuiz = () => {
-  const [listQuiz, setListQuiz] = useState([]);
+import ModalDeleteQuiz from "./Modal/ModalDeleteQuiz";
+import ModalUpdateQuiz from "./Modal/ModalUpdateQuiz";
 
+const TableQuiz = (props) => {
+  // props
+  const { listQuiz, fetchQuiz } = props;
+
+  // State
+
+  // Modal State
+  const [isShowModalDelete, setIsShowModalDelete] = useState(false);
+  const [dataDelete, setDataDelete] = useState({});
+
+  const [isShowModalUpdate, setIsShowModalUpdate] = useState(false);
+  const [dataEdit, setDataEdit] = useState({});
+
+  // handle
   useEffect(() => {
     fetchQuiz();
   }, []);
 
-  const fetchQuiz = async () => {
-    let res = await getAllQuizForAdmin();
-    if (res && +res.EC === 0) {
-      setListQuiz(res.DT);
-    } else {
-      toast.error(res.EM);
-    }
+  const handleDelete = (quiz) => {
+    setIsShowModalDelete(true);
+    setDataDelete(quiz);
+  };
+
+  const handleEdit = (quiz) => {
+    setIsShowModalUpdate(true);
+    setDataEdit(quiz);
+  };
+
+  const resetDataEdit = () => {
+    setDataEdit({});
   };
 
   return (
@@ -43,14 +60,37 @@ const TableQuiz = () => {
                   <td>{item.description}</td>
                   <td>{item.difficulty}</td>
                   <td>
-                    <button className="btn btn-warning me-2">Edit</button>
-                    <button className="btn btn-danger">Delete</button>
+                    <button
+                      className="btn btn-warning me-2"
+                      onClick={() => handleEdit(item)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => handleDelete(item)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               );
             })}
         </tbody>
       </table>
+      <ModalDeleteQuiz
+        show={isShowModalDelete}
+        setShow={setIsShowModalDelete}
+        dataDelete={dataDelete}
+        fetchQuiz={fetchQuiz}
+      />
+      <ModalUpdateQuiz
+        show={isShowModalUpdate}
+        setShow={setIsShowModalUpdate}
+        dataEdit={dataEdit}
+        fetchQuiz={fetchQuiz}
+        resetDataEdit={resetDataEdit}
+      />
     </>
   );
 };
