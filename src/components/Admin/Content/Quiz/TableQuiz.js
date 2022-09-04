@@ -21,8 +21,8 @@ const TableQuiz = () => {
 
   return (
     <>
-      <div className="mt-3">List Quizzes</div>
-      <table className="table table-bordered table-hover mt-3">
+      <div className="my-3">List Quizzes</div>
+      <table className="table table-bordered table-hover my-3">
         <thead>
           <tr>
             <th scope="col">ID</th>
