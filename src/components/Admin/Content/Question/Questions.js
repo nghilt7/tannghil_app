@@ -17,9 +17,7 @@ import {
 } from "../../../../services/apiService";
 
 const Questions = () => {
-  // State
-  const [selectedQuiz, setSelectedQuiz] = useState({});
-  const [questions, setQuestions] = useState([
+  const initQuestions = [
     {
       id: uuidv4(),
       description: "",
@@ -27,7 +25,10 @@ const Questions = () => {
       imageName: "",
       answers: [{ id: uuidv4(), description: "", isCorrect: false }],
     },
-  ]);
+  ];
+  // State
+  const [selectedQuiz, setSelectedQuiz] = useState({});
+  const [questions, setQuestions] = useState(initQuestions);
 
   const [isPreviewImage, setIsPreviewImage] = useState(false);
   const [dataImagePreview, setDataImagePreview] = useState({
@@ -64,10 +65,7 @@ const Questions = () => {
         description: "",
         image: "",
         imageFile: "",
-        answers: [
-          { id: uuidv4(), description: "", isCorrect: false },
-          { id: uuidv4(), description: "", isCorrect: false },
-        ],
+        answers: [{ id: uuidv4(), description: "", isCorrect: false }],
       };
 
       setQuestions([...questions, newQuestion]);
@@ -155,30 +153,72 @@ const Questions = () => {
   };
 
   const handleSubmitQuestionForQuiz = async () => {
-    console.log(">>>> check questions", questions, selectedQuiz);
+    // validate
 
-    // submit question
+    if (_.isEmpty(selectedQuiz)) {
+      toast.error("Please choose a quiz");
+      return;
+    }
 
-    await Promise.all(
-      questions.map(async (question) => {
-        const q = await postCreateNewQuestionForQuiz(
-          +selectedQuiz.value,
-          question.description,
-          question.imageFile ? question.imageFile : null
+    let isValidAnswer = true;
+    let indexQuestion,
+      indexAnswer = 0;
+
+    for (let i = 0; i < questions.length; i++) {
+      for (let j = 0; j < questions[i].answers.length; j++) {
+        if (!questions[i].answers[j].description) {
+          isValidAnswer = false;
+          indexAnswer = j;
+          break;
+        }
+      }
+      indexQuestion = i;
+      if (!isValidAnswer) break;
+    }
+
+    if (!isValidAnswer) {
+      toast.error(
+        `Not empty answer ${indexAnswer + 1} at Question ${indexQuestion + 1}`
+      );
+      return;
+    }
+
+    let isValidQuestion = true;
+
+    for (let i = 0; i < questions.length; i++) {
+      if (!questions[i].description) {
+        isValidQuestion = false;
+        indexQuestion = i;
+        break;
+      }
+      if (!isValidQuestion) break;
+    }
+
+    if (!isValidQuestion) {
+      toast.error(`Not empty description for Question ${indexQuestion + 1}`);
+      return;
+    }
+
+    // submit questions
+    for (const question of questions) {
+      const q = await postCreateNewQuestionForQuiz(
+        +selectedQuiz.value,
+        question.description,
+        question.imageFile ? question.imageFile : null
+      );
+
+      // submit answer
+      for (const answer of question.answers) {
+        await postCreateNewAnswerForQuestion(
+          answer.description,
+          answer.isCorrect,
+          q.DT.id
         );
+      }
+    }
 
-        // submit answer
-        await Promise.all(
-          question.answers.map(async (answer) => {
-            await postCreateNewAnswerForQuestion(
-              answer.description,
-              answer.isCorrect,
-              q.DT.id
-            );
-          })
-        );
-      })
-    );
+    toast.success("Create question and answers successfully!");
+    setQuestions(initQuestions);
   };
 
   const handlePreviewImage = (questionId) => {
