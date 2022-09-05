@@ -9,6 +9,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "nprogress/nprogress.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-perfect-scrollbar/dist/css/styles.css";
+import "react-awesome-lightbox/build/style.css";
 
 import Layout from "./Layout";
 import { store, persistor } from "./redux/store";

@@ -2,6 +2,7 @@ import Select from "react-select";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import _ from "lodash";
+import Lightbox from "react-awesome-lightbox";
 
 import { BsFillPatchPlusFill, BsFillPatchMinusFill } from "react-icons/bs";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
@@ -21,6 +22,12 @@ const Questions = () => {
       answers: [{ id: uuidv4(), description: "", isCorrect: false }],
     },
   ]);
+
+  const [isPreviewImage, setIsPreviewImage] = useState(false);
+  const [dataImagePreview, setDataImagePreview] = useState({
+    title: "",
+    url: "",
+  });
 
   // select options
   const options = [
@@ -131,6 +138,18 @@ const Questions = () => {
     console.log(">>>> check questions", questions);
   };
 
+  const handlePreviewImage = (questionId) => {
+    let _questions = _.cloneDeep(questions);
+    let index = _questions.findIndex((item) => item.id === questionId);
+    if (index > -1) {
+      setDataImagePreview({
+        url: URL.createObjectURL(_questions[index].imageFile),
+        title: _questions[index].name,
+      });
+      setIsPreviewImage(true);
+    }
+  };
+
   return (
     <div className="questions-container container">
       <div className="title">Manage Questions</div>
@@ -181,9 +200,17 @@ const Questions = () => {
                     />
                     <span>
                       {" "}
-                      {question.imageName
-                        ? question.imageName
-                        : "0 file is uploaded"}
+                      {question.imageName ? (
+                        <span
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handlePreviewImage(question.id)}
+                        >
+                          {" "}
+                          {question.imageName}{" "}
+                        </span>
+                      ) : (
+                        "0 file is uploaded"
+                      )}
                     </span>
                   </div>
                   <div className="btn-add">
@@ -283,6 +310,14 @@ const Questions = () => {
           </div>
         )}
       </div>
+
+      {isPreviewImage && (
+        <Lightbox
+          onClose={() => setIsPreviewImage(false)}
+          image={dataImagePreview.url}
+          title={dataImagePreview.title}
+        />
+      )}
     </div>
   );
 };
