@@ -91,6 +91,34 @@ const putUpdateQuiz = async (id, description, name, difficulty, quizImage) => {
   return await axios.put("api/v1/quiz", data);
 };
 
+// question
+
+const postCreateNewQuestionForQuiz = async (
+  quiz_id,
+  description,
+  questionImage
+) => {
+  const data = new FormData();
+
+  data.append("quiz_id", quiz_id);
+  data.append("description", description);
+  data.append("questionImage", questionImage);
+
+  return await axios.post("api/v1/question", data);
+};
+
+const postCreateNewAnswerForQuestion = async (
+  description,
+  correct_answer,
+  question_id
+) => {
+  return await axios.post("api/v1/answer", {
+    description,
+    correct_answer,
+    question_id,
+  });
+};
+
 export {
   postCreateNewUser,
   getAllUsers,
@@ -106,4 +134,6 @@ export {
   getAllQuizForAdmin,
   deleteQuiz,
   putUpdateQuiz,
+  postCreateNewQuestionForQuiz,
+  postCreateNewAnswerForQuestion,
 };
