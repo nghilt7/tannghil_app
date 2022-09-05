@@ -99,6 +99,11 @@ const getQuizWithQA = (quizId) => {
   return axios.get(`api/v1/quiz-with-qa/${quizId}`);
 };
 
+const postUpsertQA = (data) => {
+  return axios.post(`api/v1/quiz-upsert-qa`, { ...data });
+  // send with raw data {... data }
+};
+
 // question
 
 const postCreateNewQuestionForQuiz = async (
@@ -146,4 +151,5 @@ export {
   postCreateNewAnswerForQuestion,
   postAssignQuiz,
   getQuizWithQA,
+  postUpsertQA,
 };

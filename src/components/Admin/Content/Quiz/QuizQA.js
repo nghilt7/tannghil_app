@@ -14,6 +14,7 @@ import {
   getQuizWithQA,
   postCreateNewAnswerForQuestion,
   postCreateNewQuestionForQuiz,
+  postUpsertQA,
 } from "../../../../services/apiService";
 
 import "./QuizQA.scss";
@@ -239,27 +240,33 @@ const QuizQA = () => {
       return;
     }
 
-    // submit questions
-    for (const question of questions) {
-      const q = await postCreateNewQuestionForQuiz(
-        +selectedQuiz.value,
-        question.description,
-        question.imageFile ? question.imageFile : null
-      );
-
-      // submit answer
-      for (const answer of question.answers) {
-        await postCreateNewAnswerForQuestion(
-          answer.description,
-          answer.isCorrect,
-          q.DT.id
-        );
+    let _questions = _.cloneDeep(questions);
+    for (let i = 0; i < _questions.length; i++) {
+      if (_questions[i].imageFile) {
+        _questions[i].imageFile = await toBase64(_questions[i].imageFile);
       }
     }
 
-    toast.success("Create question and answers successfully!");
-    setQuestions(initQuestions);
+    let res = await postUpsertQA({
+      quizId: selectedQuiz.value,
+      questions: _questions,
+    });
+
+    if (res && +res.EC === 0) {
+      toast.success(res.EM);
+      fetchQuizWithQA();
+    } else {
+      toast.error(res.EM);
+    }
   };
+
+  const toBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
 
   const handlePreviewImage = (questionId) => {
     let _questions = _.cloneDeep(questions);
