@@ -1,3 +1,9 @@
 body {
   overflow: hidden;
 }
+
+.app-container {
+  .app-content {
+    height: calc(100vh - 60px);
+  }
+}
