@@ -1,53 +1,57 @@
 import {
+  ResponsiveContainer,
   BarChart,
-  CartesianGrid,
   XAxis,
-  YAxis,
   Legend,
   Tooltip,
   Bar,
 } from "recharts";
+import { useState, useEffect } from "react";
 
 import "./DashBoard.scss";
+import { getOverview } from "../../../services/apiService";
+
 const Dashboard = () => {
-  // data chart
-  const data = [
-    {
-      name: "Page A",
-      uv: 4000,
-      pv: 2400,
-    },
-    {
-      name: "Page B",
-      uv: 3000,
-      pv: 1398,
-    },
-    {
-      name: "Page C",
-      uv: 2000,
-      pv: 9800,
-    },
-    {
-      name: "Page D",
-      uv: 2780,
-      pv: 3908,
-    },
-    {
-      name: "Page E",
-      uv: 1890,
-      pv: 4800,
-    },
-    {
-      name: "Page F",
-      uv: 2390,
-      pv: 3800,
-    },
-    {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-    },
-  ];
+  // state
+  const [dataOverView, setDataOverView] = useState([]);
+  const [dataChart, setDataChart] = useState([]);
+
+  useEffect(() => {
+    fetchDataOverView();
+  }, []);
+
+  const fetchDataOverView = async () => {
+    let res = await getOverview();
+
+    if (res && +res.EC === 0) {
+      setDataOverView(res.DT);
+
+      // process chart data
+      let Qz,
+        Qs,
+        As = 0;
+      Qz = res?.DT?.others?.countQuiz;
+      Qs = res?.DT?.others?.countQuestions;
+      As = res?.DT?.others?.countAnswers;
+
+      const data = [
+        {
+          name: "Quizzes",
+          Qz,
+        },
+        {
+          name: "Questions",
+          Qs,
+        },
+        {
+          name: "Answers",
+          As,
+        },
+      ];
+
+      setDataChart(data);
+    }
+  };
 
   return (
     <>
@@ -55,21 +59,74 @@ const Dashboard = () => {
         <div className="title">Analytics Dashboard</div>
         <div className="content">
           <div className="c-left">
-            <div className="child">Total users</div>
-            <div className="child">Total quizzes</div>
-            <div className="child">Total questions</div>
-            <div className="child">Total answers</div>
+            <div className="child">
+              <span className="text-1"> Total users</span>
+              {dataOverView &&
+              dataOverView.users &&
+              dataOverView.users.total ? (
+                <>
+                  <span className="text-2">{dataOverView.users.total}</span>
+                </>
+              ) : (
+                <>0</>
+              )}
+            </div>
+            <div className="child">
+              <span className="text-1"> Total quizzes</span>
+              {dataOverView &&
+              dataOverView.others &&
+              dataOverView.others.countQuiz ? (
+                <>
+                  <span className="text-2">
+                    {dataOverView.others.countQuiz}
+                  </span>
+                </>
+              ) : (
+                <>0</>
+              )}
+            </div>
+            <div className="child">
+              <span className="text-1"> Total questions</span>
+              {dataOverView &&
+              dataOverView.others &&
+              dataOverView.others.countQuestions ? (
+                <>
+                  <span className="text-2">
+                    {dataOverView.others.countQuestions}
+                  </span>
+                </>
+              ) : (
+                <>0</>
+              )}
+            </div>
+            <div className="child">
+              <span className="text-1"> Total answers</span>
+              {dataOverView &&
+              dataOverView.others &&
+              dataOverView.others.countAnswers ? (
+                <>
+                  <span className="text-2">
+                    {dataOverView.others.countAnswers}
+                  </span>
+                </>
+              ) : (
+                <>0</>
+              )}
+            </div>
           </div>
           <div className="c-right">
-            <BarChart width={600} height={300} data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="pv" fill="#8884d8" />
-              <Bar dataKey="uv" fill="#82ca9d" />
-            </BarChart>
+            <ResponsiveContainer width="95%" height={"100%"}>
+              <BarChart data={dataChart}>
+                {/* <CartesianGrid strokeDasharray="3 3" /> */}
+                <XAxis dataKey="name" />
+                {/* <YAxis />s */}
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="Qz" fill="#8884d8" />
+                <Bar dataKey="Qs" fill="#82ca9d" />
+                <Bar dataKey="As" fill="#1231cf" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
       </div>
