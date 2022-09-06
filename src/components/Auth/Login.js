@@ -67,6 +67,12 @@ const Login = () => {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleLogin();
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="header">
@@ -100,6 +106,7 @@ const Login = () => {
               }
               value={password}
               onChange={(event) => setPassword(event.target.value)}
+              onKeyDown={(event) => handleKeyDown(event)}
             />
             {isShowPassword ? (
               <AiFillEye

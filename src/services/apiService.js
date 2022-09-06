@@ -132,6 +132,12 @@ const postCreateNewAnswerForQuestion = async (
   });
 };
 
+// auth
+
+const logout = (email, refresh_token) => {
+  return axios.post(`api/v1/logout`, { email, refresh_token });
+};
+
 export {
   postCreateNewUser,
   getAllUsers,
@@ -152,4 +158,5 @@ export {
   postAssignQuiz,
   getQuizWithQA,
   postUpsertQA,
+  logout,
 };
