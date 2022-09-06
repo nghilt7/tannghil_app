@@ -9,6 +9,7 @@ import "./Header.scss";
 import { logout } from "../../services/apiService";
 import { toast } from "react-toastify";
 import { doLogout } from "../../redux/User/user.actions";
+import Language from "./Language";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -81,6 +82,7 @@ const Header = () => {
                 </NavDropdown>
               </>
             )}
+            <Language />
           </Nav>
         </Navbar.Collapse>
       </Container>

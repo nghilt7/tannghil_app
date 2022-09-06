@@ -7,6 +7,7 @@ import "./Register.scss";
 
 import { validateEmail } from "./../../utils/validateEmail";
 import { postRegister } from "../../services/apiService";
+import Language from "../Header/Language";
 
 const Register = () => {
   // state data
@@ -67,6 +68,7 @@ const Register = () => {
       <div className="header">
         <span>Already have an account?</span>
         <button onClick={() => navigate("/login")}>Login</button>
+        <Language />
       </div>
       <div className="title col-4 mx-auto">Tanghi</div>
       <div className="welcome col-4 mx-auto">

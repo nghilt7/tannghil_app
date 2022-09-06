@@ -9,6 +9,7 @@ import "./Login.scss";
 import { toast } from "react-toastify";
 import { validateEmail } from "./../../utils/validateEmail";
 import { doLogin } from "./../../redux/User/user.actions";
+import Language from "./../Header/Language";
 
 const Login = () => {
   // data state
@@ -78,6 +79,7 @@ const Login = () => {
       <div className="header">
         <span>Don't have an account yet?</span>
         <button onClick={() => navigate("/register")}>Sign up</button>
+        <Language />
       </div>
       <div className="title col-4 mx-auto">Tanghi</div>
       <div className="welcome col-4 mx-auto">Hello, who’s this?</div>

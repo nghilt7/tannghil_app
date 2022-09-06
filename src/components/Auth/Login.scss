@@ -15,9 +15,12 @@
   }
 
   .header {
+    align-items: center;
+    display: flex;
+    gap: 10px;
     height: 45px;
+    justify-content: flex-end;
     padding: 5px 100px 0 100px;
-    text-align: right;
 
     button {
       background-color: #f9f9f9;
