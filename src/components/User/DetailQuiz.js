@@ -8,6 +8,7 @@ import "./DetailQuiz.scss";
 
 import Question from "./Question";
 import ModalResult from "./ModalResult";
+import RightContent from "./RightContent/RightContent";
 
 const DetailQuiz = () => {
   // State
@@ -168,7 +169,9 @@ const DetailQuiz = () => {
           </button>
         </div>
       </div>
-      <div className="right-content">count down</div>
+      <div className="right-content">
+        <RightContent dataQuiz={dataQuiz} />
+      </div>
       <ModalResult
         show={isShowModalResult}
         setShow={setIsShowModalResult}
