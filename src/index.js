@@ -10,6 +10,7 @@ import "nprogress/nprogress.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import "react-awesome-lightbox/build/style.css";
+import i18n from "./utils/i18n";
 
 import Layout from "./Layout";
 import { store, persistor } from "./redux/store";
